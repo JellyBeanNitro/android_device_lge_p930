@@ -8,10 +8,11 @@ public class Startup extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent bootintent) {
-        Fastcharge.restore(context);
         BacklightDisable.restore(context);
         VibratorIntensity.restore(context);
         WifiPm.restore(context);
         SDCardCache.restore(context);
+        Blx.restore(context);
+        UsbCharge.restore(context);
     }
 }

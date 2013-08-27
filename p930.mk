@@ -26,6 +26,7 @@ $(call inherit-product, build/target/product/full.mk)
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/init.rc:root/init.rc \
     $(LOCAL_PATH)/init.iprj.rc:root/init.iprj.rc \
+    $(LOCAL_PATH)/init.target.rc:root/init.target.rc \
     $(LOCAL_PATH)/init.iprj.usb.rc:root/init.iprj.usb.rc \
     $(LOCAL_PATH)/ueventd.iprj.rc:root/ueventd.iprj.rc \
     $(LOCAL_PATH)/fstab.iprj:root/fstab.iprj \
@@ -38,20 +39,31 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/init.qcom.mdm_links.sh:system/etc/init.qcom.mdm_links.sh \
     $(LOCAL_PATH)/prebuilt/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/prebuilt/charger:root/charger \
+
 ## Configs
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/config/vold.fstab:system/etc/vold.fstab \
-    $(LOCAL_PATH)/config/atcmd_virtual_kbd.kl:system/usr/keylayout/atcmd_virtual_kbd.kl \
-    $(LOCAL_PATH)/config/ffa-keypad_qwerty.kl:system/usr/keylayout/ffa-keypad_qwerty.kl \
-    $(LOCAL_PATH)/config/i_atnt-keypad.kl:system/usr/keylayout/i_atnt-keypad.kl \
-    $(LOCAL_PATH)/config/pmic8058_pwrkey.kl:system/usr/keylayout/pmic8058_pwrkey.kl \
-    $(LOCAL_PATH)/config/touch_dev.kl:system/usr/keylayout/touch_dev.kl \
-    $(LOCAL_PATH)/config/touch_dev.idc:system/usr/idc/touch_dev.idc \
     $(LOCAL_PATH)/config/thermald.conf:system/etc/thermald.conf \
     $(LOCAL_PATH)/config/audio_policy.conf:system/vendor/etc/audio_policy.conf \
     $(LOCAL_PATH)/config/hosts:system/etc/hosts \
     $(LOCAL_PATH)/config/wpa_supplicant.conf:system/etc/wifi/wpa_supplicant.conf \
     $(LOCAL_PATH)/config/bcmdhd.cal:system/etc/wifi/bcmdhd.cal \
+    $(LOCAL_PATH)/config/qosmgr_rules.xml:system/etc/qosmgr_rules.xml \
+#    $(LOCAL_PATH)/config/p2p_supplicant.conf:system/etc/wifi/p2p_supplicant.conf \
+
+## Configs
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/config/ats_input.kl:system/usr/keylayout/ats_input.kl \
+    $(LOCAL_PATH)/config/synaptics_ts.kl:system/usr/keylayout/synaptics_ts.kl \
+    $(LOCAL_PATH)/config/atcmd_virtual_kbd.kl:system/usr/keylayout/atcmd_virtual_kbd.kl \
+    $(LOCAL_PATH)/config/ijb_skt-keypad.kl:system/usr/keylayout/ijb_skt-keypad.kl \
+    $(LOCAL_PATH)/config/pmic8xxx_pwrkey.kl:system/usr/keylayout/pmic8xxx_pwrkey.kl \
+    $(LOCAL_PATH)/config/touch_dev.kl:system/usr/keylayout/touch_dev.kl \
+    $(LOCAL_PATH)/config/osp3-input.kl:system/usr/keylayout/osp3-input.kl \
+    $(LOCAL_PATH)/config/touch_dev.idc:system/usr/idc/touch_dev.idc \
+    $(LOCAL_PATH)/config/osp3-input.idc:system/usr/idc/osp3-input.idc \
 	
 # Permission files
 PRODUCT_COPY_FILES += \
@@ -91,12 +103,14 @@ PRODUCT_PACKAGES += \
     copybit.msm8660 \
     lights.msm8660 \
     gps.msm8660 \
+    libtinyalsa \
     libaudioutils \
     audio.a2dp.default \
+    audio.usb.default \
     audio_policy.msm8660 \
-    power.msm8660 \
     audio.primary.msm8660 \
-    com.android.future.usb.accessory
+    power.qcom \
+    com.android.future.usb.accessory \
 
 # OMX
 PRODUCT_PACKAGES += \
@@ -109,7 +123,21 @@ PRODUCT_PACKAGES += \
     libOmxAacEnc \
     libOmxAmrEnc \
     libOmxEvrcEnc \
-    libOmxQcelp13Enc
+    libOmxQcelp13Enc \
+
+# OMX Open Source, using only for my build
+PRODUCT_PACKAGES += \
+    libmmosal \
+    libmmparser \
+    libASFParserLib \
+    libaudcal \
+    libacdbloader \
+    libacdbmapper \
+    libaudioalsa \
+    libaudioparsers \
+    libOmxAacDec \
+    libOmxWmaDec \
+    libqc-surfaceflinger \
 
 PRODUCT_PACKAGES += \
     make_ext4fs \
@@ -120,6 +148,11 @@ PRODUCT_PACKAGES += \
     hciconfig \
     hwaddrs \
     brcm_patchram_plus \
+    org.codeaurora.Performance \
+    org.codeaurora.Performance.xml \
+    libgesture_client \
+    libgestureservice \
+    gestures.8660 \
 
 PRODUCT_PACKAGES += \
     LiveWallpapers \
@@ -136,7 +169,7 @@ PRODUCT_PACKAGES += \
 # Charger mode
 PRODUCT_PACKAGES += \
     charger \
-    charger_res_images
+    charger_res_images \
 
 # Common properties
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -147,8 +180,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     DEVICE_PROVISIONED=1 \
     ro.telephony.ril_class=LGEQualcommUiccRIL \
     ro.telephony.ril.v3=qcomuiccstack \
-    pm.sleep_mode=1 \
-    ro.ril.disable.power.collapse=0 \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=120 \
     debug.sf.hw=1 \
@@ -161,15 +192,18 @@ PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true \
     ro.bt.bdaddr_path=/data/misc/bd_addr \
     ro.product.camera=lgp930 \
+    debug.camera.landscape=true \
     ro.ril.shutdown=true \
     debug.mdpcomp.maxlayer=3 \
     debug.mdpcomp.logs=0 \
-    persist.sys.ui.hw=1 \
-    dalvik.vm.verify_bytecode=false \
     ro.sf.compbypass.enable=1 \
+    debug.hwc.dynThreshold=1.9 \
+    debug.overlay.initialized=0 \
+    ro.hwui.text_cache_width=1536 \
+    ro.hwui.text_cache_height=256 \
     ro.hdmi.enable=true \
-    net.dns1=8.8.8.8 \
-    net.dns2=8.8.4.4 \
+    hdmi.Landscape=0 \
+    dalvik.vm.dexopt-data-only=1 \
 
 ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.secure=0 \

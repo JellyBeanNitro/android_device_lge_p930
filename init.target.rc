@@ -1,0 +1,65 @@
+on post-fs-data
+   mkdir /data/tombstones 0771 system system
+   mkdir /data/tombstones/modem 0771 system system
+   mkdir /data/tombstones/mdm 0771 system system
+   mkdir /data/tombstones/lpass 0771 system system
+   chown system system /sys/power/lge_logstart
+   chmod 0660 /sys/power/lge_logstart
+   mkdir /data/logger 0771 system system
+   chown system system /data/logger
+   chmod 0775 /data/logger
+
+on boot
+    chown system system /sys/devices/virtual/input/lge_touch/incoming_call
+    chown system system /sys/devices/i2c-9/9-0039/run_calibration
+    chmod 0770 /sys/devices/i2c-9/9-0039/run_calibration 
+    start ami304d
+    start qcamerasvr
+
+service ami304d /system/bin/ami304d
+    class late_start
+    user compass
+    group system
+    oneshot
+
+service qcamerasvr /system/bin/mm-qcamera-daemon
+    class late_start
+    user camera
+    group camera system inet input
+    
+on post-fs
+
+service mpdecision /system/bin/mpdecision --no_sleep --avg_comp
+    class main
+    user root
+    disabled
+
+service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
+    user system
+    group system
+    disabled
+
+service thermald /system/bin/thermald
+    class main
+    user root
+    group root
+
+on property:ro.build.type=eng
+   mount debugfs /sys/kernel/debug /sys/kernel/debug
+
+on property:ro.build.type=userdebug
+   mount debugfs /sys/kernel/debug /sys/kernel/debug
+
+on property:ro.build.type=eng
+   write /sys/kernel/debug/tracing/buffer_size_kb   1024
+   write /sys/kernel/debug/tracing/events/sched/sched_switch/enable 1
+   write /sys/kernel/debug/tracing/events/irq/irq_handler_entry/enable 1
+   write /sys/kernel/debug/tracing/events/workqueue/workqueue_execute_start/enable 1
+   write /sys/kernel/debug/tracing/events/workqueue/workqueue_execute_end/enable 1
+
+on property:ro.build.type=userdebug
+   write /sys/kernel/debug/tracing/buffer_size_kb   1024
+   write /sys/kernel/debug/tracing/events/sched/sched_switch/enable 1
+   write /sys/kernel/debug/tracing/events/irq/irq_handler_entry/enable 1
+   write /sys/kernel/debug/tracing/events/workqueue/workqueue_execute_start/enable 1
+   write /sys/kernel/debug/tracing/events/workqueue/workqueue_execute_end/enable 1   

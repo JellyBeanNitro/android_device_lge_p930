@@ -15,7 +15,7 @@ public class SDCardCache implements OnPreferenceChangeListener {
     }
 
     /**
-     * Restore Sweep2Wake stroke setting from SharedPreferences. (Write to kernel.)
+     * Restore SDCardCache stroke setting from SharedPreferences. (Write to kernel.)
      * @param context       The context to read the SharedPreferences from
      */
     public static void restore(Context context) {

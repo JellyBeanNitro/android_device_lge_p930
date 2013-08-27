@@ -20,7 +20,7 @@
 <!-- These resources are around just to allow their values to be customized for different hardware and product builds. -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <bool name="config_animateScreenLights">false</bool>
+    <bool name="config_animateScreenLights">true</bool>
 
     <string name="config_datause_iface">rmnet_sdio0</string>
 	
@@ -40,10 +40,7 @@
 	
     <bool name="config_autoBrightnessButtonKeyboard">false</bool>
 
-    <!-- The orientation in which case volume keys should be swapped.
-         See ROTATION_0, ROTATION_90, ROTATION_180, ROTATION_270 in android.view.Surface
-         for more details about values -->
-    <integer name="swap_volume_keys_orientation">1</integer>
+    <bool name="config_forceDisableHardwareKeyboard">true</bool>
 
     <!-- These are all dummies, but need to be present to enable UI control of auto-brightness The actual control and values are all in-kernel -->
     <integer-array name="config_autoBrightnessLevels">
@@ -144,8 +141,7 @@
         <item>"mobile_fota,10,0,2,60000,true"</item>
         <item>"mobile_ims,11,0,2,60000,true"</item>
         <item>"mobile_cbs,12,0,2,60000,true"</item>
-<!--    <item>"bluetooth,7,7,2,-1,true"</item>   -->
-        <item>"mobile_bluetooth,7,7,1,-1,true"</item>
+        <item>"bluetooth,7,7,2,-1,true"</item>
         <item>"wifi_p2p,13,1,0,-1,true"</item>
     </string-array>
 
@@ -157,8 +153,9 @@
         <item>"7,1"</item>
     </string-array>
 
-    <!-- Component name of the default wallpaper. This will be ImageWallpaper if not specified -->
-    <string name="default_wallpaper_component">com.android.phasebeam/.PhaseBeamWallpaper</string>
+    <!-- Component name of the default wallpaper. This will be ImageWallpaper if not specified 
+    <string name="default_wallpaper_component">com.android.phasebeam/.PhaseBeamWallpaper</string> -->
+    <string name="default_wallpaper_component" translatable="false">@null</string>
 
     <!-- Package name providing network location support. -->
     <string name="config_networkLocationProviderPackageName" translatable="false">com.google.android.location</string>

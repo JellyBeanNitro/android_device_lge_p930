@@ -8,7 +8,6 @@ ro.radio.networkmode=enable
 ro.radio.check_csp=disable
 ro.radio.topreviousmode=disable
 ro.telephony.default_network=9
-ro.vendor.extension_library=/system/lib/libqc-opt.so
 persist.rild.nitz_plmn=
 persist.rild.nitz_long_ons_0=
 persist.rild.nitz_long_ons_1=

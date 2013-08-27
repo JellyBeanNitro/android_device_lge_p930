@@ -68,7 +68,6 @@ case "$emmc_boot"
     ;;
 esac
 
-
 # Post-setup services
 case "$target" in
     "msm8660_surf" | "msm8660_csfb" | "i_atnt" | "hdk_8x60" | "i_skt" | "i_dcm" | "p930" | "su640" )
@@ -85,11 +84,17 @@ case "$target" in
     ;;
 esac
 
+# Change adj level and min_free_kbytes setting for lowmemory killer to kick in
+case "$target" in
+   "p930")
+      echo 0,1,2,4,9,12 > /sys/module/lowmemorykiller/parameters/adj
+      echo 5120 > /proc/sys/vm/min_free_kbytes
+   ;;
+esac
+
 usb_config=`getprop persist.sys.usb.config`
 case "$usb_config" in
     "") #USB persist config not set, select default configuration
         setprop persist.sys.usb.config mtp,adb
     ;;
 esac
-
-

@@ -18,7 +18,7 @@ TARGET_SCORPION_BIONIC_PLDOFFS := 6
 TARGET_SCORPION_BIONIC_PLDSIZE := 128
 
 TARGET_PREBUILT_KERNEL := device/lge/p930/kernel
-BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=iprj no_console_suspend=1
+BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=iprj kgsl.mmutype=gpummu vmalloc=580M lpj=67667 msm_rtb.filter=0x0
 BOARD_KERNEL_BASE := 0x40200000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_FORCE_RAMDISK_ADDRESS := 0x41a00000
@@ -27,7 +27,7 @@ TARGET_BOARD_PLATFORM := msm8660
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno200
 
 TARGET_KERNEL_SOURCE := kernel/lge/iproj
-TARGET_KERNEL_CONFIG := cyanogenmod_p930_defconfig
+TARGET_KERNEL_CONFIG := miro_jbskt_defconfig
 TARGET_KERNEL_CUSTOM_TOOLCHAIN := arm-eabi-4.4.3
 
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x01400000
@@ -39,6 +39,7 @@ TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_SUPPRESS_EMMC_WIPE := true
 BOARD_VOLD_MAX_PARTITIONS := 32
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/class/android_usb/android0/f_mass_storage/lun/file"
+#TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/msm_hsusb/gadget/lun%d/file"
 
 TARGET_SPECIFIC_HEADER_PATH := device/lge/p930/include
 
@@ -48,12 +49,9 @@ BOARD_USES_QCOM_HARDWARE := true
 TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_ION := true
 USE_OPENGL_RENDERER := true
-TARGET_QCOM_DISPLAY_VARIANT := caf
+#TARGET_QCOM_DISPLAY_VARIANT := caf
 BOARD_EGL_CFG := device/lge/p930/egl.cfg
-
 COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE
-COMMON_GLOBAL_CFLAGS += -DICS_CAMERA_BLOB
-COMMON_GLOBAL_CFLAGS += -DQCOM_ACDB_ENABLED
 
 # WIFI
 BOARD_WPA_SUPPLICANT_DRIVER := NL80211
@@ -64,7 +62,7 @@ BOARD_HOSTAPD_DRIVER := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB := lib_driver_cmd_bcmdhd
 BOARD_WLAN_DEVICE := bcmdhd
 WIFI_DRIVER_FW_PATH_PARAM := "/sys/module/bcmdhd/parameters/firmware_path"
-WIFI_DRIVER_FW_PATH_STA := "/system/etc/firmware/fw_bcmdhd_p2p.bin"
+WIFI_DRIVER_FW_PATH_STA := "/system/etc/firmware/fw_bcmdhd.bin"
 WIFI_DRIVER_FW_PATH_P2P := "/system/etc/firmware/fw_bcmdhd_p2p.bin"
 WIFI_DRIVER_FW_PATH_AP := "/system/etc/firmware/fw_bcmdhd_apsta.bin"
 
@@ -72,6 +70,8 @@ WIFI_DRIVER_FW_PATH_AP := "/system/etc/firmware/fw_bcmdhd_apsta.bin"
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
 TARGET_NEEDS_BLUETOOTH_INIT_DELAY := true
+#TARGET_CUSTOM_BLUEDROID := ../../../device/lge/p930/qcom/bluetooth.c
+BOARD_CUSTOM_BRCM_PATCHRAM_PLUS := ../../../device/lge/p930/qcom/brcm_patchram_plus.c
 
 # GPS
 BOARD_USES_QCOM_LIBRPC := true
@@ -84,9 +84,8 @@ ENABLE_WEBGL := true
 TARGET_FORCE_CPU_UPLOAD := true
 TARGET_PROVIDES_LIBLIGHTS := true
 BOARD_HAVE_BACK_MIC_CAMCORDER := true
-TARGET_DISABLE_ARM_PIE := true
-BOARD_NEEDS_MEMORYHEAPPMEM := true
 TARGET_BOOTANIMATION_USE_RGB565 := true
 TARGET_BOOTANIMATION_PRELOAD := true
 BOARD_USE_SKIA_LCDTEXT := true
 TARGET_AVOID_DRAW_TEXTURE_EXTENSION := true
+DYNAMIC_SHARED_LIBV8SO := true

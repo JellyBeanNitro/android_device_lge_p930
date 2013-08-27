@@ -33,14 +33,14 @@ start_hciattach ()
 kill_hciattach ()
 {
   logi "kill_hciattach: pid = $hciattach_pid"
-  ## careful not to kill zero or null!
   kill -TERM $hciattach_pid
   echo 0 > $BLUETOOTH_SLEEP_PATH
-  # this shell doesn't exit now -- wait returns for normal exit
 }
 
-/system/bin/brcm_patchram_plus --no2bytes --patchram /etc/firmware/BCM4330B1_002.001.003.0243.0308.hcd /dev/ttyHS0
-/system/bin/brcm_patchram_plus --no2bytes -baudrate 4000000 /dev/ttyHS0 
+/system/bin/brcm_patchram_plus --no2bytes --patchram /etc/firmware/BCM4330B14.hcd /dev/ttyHS0
+
+/system/bin/brcm_patchram_plus --no2bytes -baudrate 4000000 /dev/ttyHS0
+
 exit_code_hci_qcomm_download=$?
 
 case $exit_code_hci_qcomm_download in

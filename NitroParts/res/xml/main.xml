@@ -25,12 +25,14 @@
 	</PreferenceCategory>
 
 	<PreferenceCategory
-    	android:title="@string/category_usb_title">
-	    <CheckBoxPreference
-	        android:key="fastcharge"
-	        android:title="@string/fastcharge_title_head"
-	        android:summary="@string/fastcharge_summary_head"
-	        android:defaultValue="0" />
+    	android:title="@string/category_blx_title">
+	    <ListPreference
+	        android:key="blx"
+	        android:title="@string/blx_title_head"
+	        android:summary="@string/blx_summary_head"
+	        android:entries="@array/blx_entries"
+	        android:entryValues="@array/blx_values"
+	        android:defaultValue="95" />
 	</PreferenceCategory>
 
 	<PreferenceCategory
@@ -50,5 +52,32 @@
 	        android:summary="@string/wifi_pm_summary_head"
 	        android:defaultValue="N" />
 	</PreferenceCategory>
+
+	<PreferenceCategory
+   	    android:title="@string/category_screen_title">
+	    <Preference 
+	    android:key="gsensor"
+	    android:title="@string/g_sensor_title"
+	    android:summary="@string/g_sensor_summary" >
+	    <intent android:action="com.cyanogenmod.settings.device.GSensor"/>
+	    </Preference>
+	</PreferenceCategory>
+
+	<PreferenceCategory
+	android:title="@string/category_usb_charge_title">
+	    <CheckBoxPreference
+	        android:key="usb_charge"
+	        android:title="@string/usb_charge_title_head"
+	        android:summary="@string/usb_charge_summary_head"
+	        android:defaultValue="1" />
+	</PreferenceCategory>
+
+        <PreferenceScreen
+               android:title="@string/cpu_title"
+               android:summary="@string/cpu_summary" >
+       <intent android:action="android.intent.action.MAIN"
+               android:targetPackage="com.bvalosek.cpuspy"
+               android:targetClass="com.bvalosek.cpuspy.ui.HomeActivity" />
+       </PreferenceScreen>
 
 </PreferenceScreen>

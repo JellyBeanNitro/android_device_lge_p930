@@ -18,26 +18,40 @@ on boot
     chmod 0660 dev/ami306hal
     mkdir /data/amit 0770 compass system
     mkdir /data/gesture 0770 compass system
-    chown system system /sys/devices/virtual/input/lge_touch/keyguard
     chown root system /sys/devices/virtual/bdi/179:0/read_ahead_kb
     chmod 0660 /sys/devices/virtual/bdi/179:0/read_ahead_kb
     chown system system /sys/class/timed_output/vibrator/amp
     chmod 0660 /sys/class/timed_output/vibrator/amp
     chown system system /sys/module/bcmdhd/parameters/wifi_pm
     chmod 0660 /sys/module/bcmdhd/parameters/wifi_pm
+    chown system system /sys/class/input/input0/acc_cal
+    chmod 0660 /sys/class/input/input0/acc_cal
     chown system system /sys/kernel/fast_charge/force_fast_charge
     chmod 0660 /sys/kernel/fast_charge/force_fast_charge
+    chown system system /sys/class/misc/batterylifeextender/charging_limit
+    chmod 0660 /sys/class/misc/batterylifeextender/charging_limit
+    chown system system /sys/module/pmic8058_charger/parameters/disabled
+    chmod 0660 /sys/module/pmic8058_charger/parameters/disabled
     mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill1/type
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state    
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill2/type
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill2/state
     chown bluetooth bluetooth /proc/bluetooth/sleep/proto
     chown system system /sys/module/sco/parameters/disable_esco
+    chown bluetooth bluetooth /sys/module/hci_smd/parameters/hcismd_set
     chmod 0660 /sys/module/bluetooth_power/parameters/power
+    chmod 0660 /sys/module/hci_smd/parameters/hcismd_set
     chmod 0660 /sys/class/rfkill/rfkill0/state
-    chmod 0660 /proc/bluetooth/sleep/proto
+    chmod 0660 /sys/class/rfkill/rfkill1/state
+    chmod 0660 /sys/class/rfkill/rfkill2/state
     chown bluetooth bluetooth /dev/ttyHS0
     chmod 0660 /dev/ttyHS0
+    chown bluetooth bluetooth /dev/ttyHS2
+    chmod 0660 /dev/ttyHS2
     chown bluetooth bluetooth /sys/devices/platform/msm_serial_hs.0/clock
     chmod 0660 /sys/devices/platform/msm_serial_hs.0/clock
     chmod 0444 /proc/cmdline
@@ -55,6 +69,8 @@ on boot
     chmod 2770 /dev/socket/qmux_audio
     mkdir /dev/socket/qmux_bluetooth 0770 bluetooth bluetooth
     chmod 2770 /dev/socket/qmux_bluetooth
+    mkdir /dev/socket/qmux_gps 0770 gps gps
+    chmod 2770 /dev/socket/qmux_gps
     chmod 0660 /dev/smd0
     chown system system /dev/smd0
     chmod 0660 /dev/ttyGS0
@@ -83,13 +99,31 @@ on boot
     chmod 0660 /sys/devices/system/cpu/cpufreq/smartass/boost_enabled
     chown system system /sys/devices/system/cpu/cpufreq/smartass/max_cpu_load
     chmod 0660 /sys/devices/system/cpu/cpufreq/smartass/max_cpu_load
-    chown system system /sys/devices/system/cpu/cpufreq/smartass/sample_rate_jiffies
-    chmod 0660 /sys/devices/system/cpu/cpufreq/smartass/sample_rate_jiffies
     chown system system /sys/devices/system/cpu/cpufreq/smartass/boost_pulse
     chmod 0660 /sys/devices/system/cpu/cpufreq/smartass/boost_pulse
 
+    chown system /sys/devices/system/cpu/cpu0/rq-stats/run_queue_avg
+    chown system /sys/devices/system/cpu/cpu0/rq-stats/cpu_normalized_load
+    chown system /sys/devices/system/cpu/cpu0/rq-stats/run_queue_poll_ms
+    chown system /sys/devices/system/cpu/cpu0/rq-stats/def_timer_ms
+
     # original perms
     symlink /dev/graphics/fb1 /dev/graphics/hdmi
+    chown system graphics /sys/class/graphics/fb1/hpd
+    chmod 0664 /sys/devices/virtual/graphics/fb1/hpd
+    chmod 0664 /sys/devices/virtual/graphics/fb1/video_mode
+    chmod 0664 /sys/devices/virtual/graphics/fb1/format_3d
+    chmod 0664 /sys/devices/virtual/graphics/fb1/hdmi_boot_completed
+    chown system system /sys/devices/virtual/graphics/fb1/format_3d
+    chown radio radio /sys/class/android_usb/f_rmnet_smd_sdio/transport
+    write /proc/sys/net/ipv6/conf/rmnet0/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet1/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet2/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet3/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet4/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet5/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet6/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet7/accept_ra 2
     write /proc/sys/net/ipv6/conf/rmnet_sdio0/accept_ra 2
     write /proc/sys/net/ipv6/conf/rmnet_sdio1/accept_ra 2
     write /proc/sys/net/ipv6/conf/rmnet_sdio2/accept_ra 2
@@ -98,19 +132,36 @@ on boot
     write /proc/sys/net/ipv6/conf/rmnet_sdio5/accept_ra 2
     write /proc/sys/net/ipv6/conf/rmnet_sdio6/accept_ra 2
     write /proc/sys/net/ipv6/conf/rmnet_sdio7/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_usb0/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_usb1/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_usb2/accept_ra 2
+    write /proc/sys/net/ipv6/conf/rmnet_usb3/accept_ra 2
+    chown system system /sys/class/atcmd/name
+    chmod 0660 /sys/class/atcmd/name
+    chown system system /dev/lge_atcmd
+    chown system system /dev/eta_event_log
     chown radio radio /sys/class/android_usb/f_rmnet_smd_sdio/transport
     chown system system /sys/devices/platform/msm_fb.524801/msm_fb_lcd_onoff
     chmod 0644 /sys/devices/platform/msm_fb.524801/msm_fb_lcd_onoff
 
+    chown system system /sys/devices/virtual/input/lge_synaptics_touch/keyguard
+    chown system system /sys/devices/virtual/input/lge_synaptics_touch/ic_rw
+    chown system system /sys/devices/virtual/input/lge_touch/keyguard
+
+    # Node for USB service 
+    mkdir /dev/bus 0755 root root 
+    mkdir /dev/bus/usb 0755 root root
+
 on init
     export EXTERNAL_STORAGE /storage/sdcard0
-
-# Backward compatibility
     symlink /system/bin /bin
 
 # create mountpoints for storage
     mkdir /storage 0111 system system
     mkdir /storage/sdcard0 0000 system system
+    mkdir /storage/usbdisk 0666 system system 
+    symlink /storage/usbdisk /mnt/usbdisk 
+    symlink /mnt/usbdisk /usbdisk
     symlink /storage/sdcard0 /sdcard
     symlink /storage/sdcard0 /mnt/sdcard
 
@@ -123,7 +174,6 @@ on emmc-fs
     mkdir /mpt 0771 system system
     wait /dev/block/mmcblk0p31
     mkdir /tombstones 0771 system system
-
     mkdir /tombstones/modem 0771 system system
     mkdir /tombstones/mdm 0771 system system
     mkdir /tombstones/lpass 0771 system system
@@ -149,11 +199,13 @@ on post-fs
 on post-fs-data
     mkdir /data/misc/wifi 0770 wifi wifi
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
     write /sys/module/subsystem_restart/parameters/restart_level 1
     write /sys/module/subsystem_restart/parameters/enable_ramdumps 1
     setprop vold.post_fs_data_done 1
+    setprop ro.crypto.keyfile.userdata /dev/block/platform/msm_sdcc.1/by-name/encrypt
 
 service chargerlogo /charger
     class charger
@@ -170,18 +222,6 @@ service rmt_storage /system/bin/rmt_storage /dev/block/mmcblk0p10 /dev/block/mmc
 
 on property:ro.emmc=1
     start rmt_storage
-
-#service btld /system/bin/logwrapper /system/bin/btld -pf /system/etc/firmware/BCM4330B1_002.001.003.0243.0308.hcd -hb 4000000  -lpm 1
-#    user root
-#    group bluetooth net_bt_admin
-#    disabled
-#    oneshot 
-
-#service brcm_patchram_plus /system/bin/logwrapper /system/bin/brcm_patchram_plus --no2bytes --enable_hci --baudrate 4000000 --patchram /etc/firmware/BCM4330B1_002.001.003.0243.0308.hcd /dev/ttyHS0
-#    class main
-#    user bluetooth
-#    group bluetooth net_bt_admin
-#    disabled
 
 service qmiproxy /system/bin/qmiproxy
     class main
@@ -224,39 +264,21 @@ service kickstart /system/bin/qcks l
     oneshot
     disabled
 
-# Start kickstart if csfb or svlte2a target
 on property:ro.baseband=csfb
     wait /dev/ttyHSL1
     mkdir /data/qcks 0770 system system
     exec /system/bin/sh /system/etc/init.qcom.mdm_links.sh
     start kickstart
 
-service mpdecision /system/bin/mpdecision --no_sleep --avg_comp
-    class main
-    user root
-    disabled
-
-service thermald /system/bin/thermald
-    class main
+service time_daemon /system/bin/time_daemon
+    class late_start
     user root
     group root
-    disabled
-
-service time_daemon /system/bin/time_daemon
-    user system
-    group system qcom_oncrpc
     oneshot
     disabled
 
 on property:persist.timed.enable=true
     start time_daemon
-
-#on property:dev.bootcomplete=1
-#    mkdir /data/time/ 0700
-#    chown system system /data/time
-#    chmod 0640 /dev/rtc0
-#    chown root system /dev/rtc0
-#    start time_daemon
 
 service dhcpcd_wlan0 /system/bin/dhcpcd -aBKAL
     class core
@@ -274,6 +296,11 @@ service dhcpcd_p2p /system/bin/dhcpcd -aABKL
     oneshot
 
 service iprenew_p2p /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_bnep0 /system/bin/dhcpcd -BKLG
     class main
     disabled
     oneshot
@@ -299,18 +326,26 @@ service hciattach /system/bin/sh /system/etc/init.qcom.bt.sh
     disabled
     oneshot
 
-service ami304d /system/bin/ami304d
+service btld /system/bin/logwrapper /system/bin/btld -pf /system/etc/firmware/BCM4330B14.hcd -hb 4000000 -lpm 1
     class main
-    user compass
-    group system
-
-service hdmid /system/bin/hdmid
-    class late_start
-    socket hdmid stream 0660 root system graphics
+    group bluetooth net_bt_admin
     disabled
+    oneshot
+
+service ppd /system/bin/mm-pp-daemon
+    class late_start
+    user system
+    socket pps stream 0660 system system graphics
+    group system graphics
+
+on property:crypto.driver.load=1
+     insmod /system/lib/modules/qce.ko
+     insmod /system/lib/modules/qcedev.ko
+
+on property:crypto.driver.load=0
+     exec /system/bin/rmmod qcedev.ko
+     exec /system/bin/rmmod qce.ko
 
 on property:dev.bootcomplete=1
     exec /system/bin/hwaddrs
-
-on property:ro.hdmi.enable=true
-    start hdmid
+    write /sys/devices/virtual/graphics/fb1/hdmi_boot_completed 1

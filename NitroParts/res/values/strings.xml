@@ -2,10 +2,6 @@
 <resources>
     <string name="app_name">Nitro Settings</string>
 
-    <string name="category_usb_title">USB</string>
-    <string name="fastcharge_title_head">Fast Charge</string>
-    <string name="fastcharge_summary_head">Enable to draw more power when connected to a PC USB port (750mA)</string>
-
     <string name="category_backlightdisable_title">Backlight</string>
     <string name="backlightdisable_title_head">Disable Button Backlight</string>
     <string name="backlightdisable_summary_head">Select to disable the capacitive button backlight</string>
@@ -21,5 +17,26 @@
     <string name="category_wifi_pm_title">WiFi</string>
     <string name="wifi_pm_title_head">WiFi Control</string>
     <string name="wifi_pm_summary_head">Select mode WIFI_FAST</string>
+	
+    <string name="category_blx_title">BLX</string>
+    <string name="blx_title_head">Battery Life eXtender</string>
+    <string name="blx_summary_head">Select limit for the capacity the battery.</string>
+
+    <string name="category_screen_title">Sensors</string>
+    <string name="g_sensor_title">Horizontal calibration</string>
+    <string name="g_sensor_summary">Calibrate horizontally using accelerometer</string>
+    <string name="gsensor_ready">Place device on a level surface and tap Calibrate</string>
+    <string name="gsensor_calibrating">Calibrating. Do not move device. Please wait...</string>
+    <string name="gsensor_nofile">Unable to find offset file. Try again</string>
+    <string name="gsensor_end">Calibrated</string>
+    <string name="gsensor_button1">Complete</string>
+    <string name="gsensor_button2">Calibrate</string>
+
+    <string name="category_usb_charge_title">USB</string>
+    <string name="usb_charge_title_head">USB Charging</string>
+    <string name="usb_charge_summary_head">Enable/Disable charging</string>
+
+    <string name="cpu_title">CPU Statistics</string>
+    <string name="cpu_summary">Advance CPU Statistics</string>
 
 </resources>

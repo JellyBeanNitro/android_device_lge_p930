@@ -15,7 +15,7 @@ public class WifiPm implements OnPreferenceChangeListener {
     }
 
     /**
-     * Restore fast charge setting from SharedPreferences. (Write to kernel.)
+     * Restore wifipm setting from SharedPreferences. (Write to kernel.)
      * @param context       The context to read the SharedPreferences from
      */
     public static void restore(Context context) {

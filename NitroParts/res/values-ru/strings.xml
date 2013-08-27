@@ -2,10 +2,6 @@
 <resources>
     <string name="app_name">Настройки Nitro</string>
 
-    <string name="category_usb_title">USB</string>
-    <string name="fastcharge_title_head">Быстрая зарядка</string>
-    <string name="fastcharge_summary_head">Включить быструю зарядку от PC USB (750mA)</string>
-
     <string name="category_backlightdisable_title">Подсветка</string>
     <string name="backlightdisable_title_head">Подсветка сенсорных кнопок</string>
     <string name="backlightdisable_summary_head">Запретить подсветку сенсорных кнопок</string>
@@ -18,8 +14,25 @@
     <string name="sdcard_cache_title_head">Размер SDCard Cache</string>
     <string name="sdcard_cache_summary_head">Выбрать размер SDCard Кеша</string>
 
-    <string name="category_wifi_pm_title">WiFi</string>
     <string name="wifi_pm_title_head">Управление WiFi</string>
     <string name="wifi_pm_summary_head">Включение режима WIFI_FAST</string>
+	
+    <string name="blx_summary_head">Выбор максимального лимита заряда аккумулятора.</string>
 
+    <string name="category_screen_title">Датчики</string>
+    <string name="g_sensor_title">Горизонтальная калибровка</string>
+    <string name="g_sensor_summary">Горизонтальная калибровка используется в Акселерометром</string>
+    <string name="gsensor_ready">Положите телефон на ровную поверхность и нажмите Калибровка</string>
+    <string name="gsensor_calibrating">Калибруется. Не двигайте устройство. Пожалуйста подождите...</string>
+    <string name="gsensor_nofile">Неудалось найти значение. Попробуйте еще раз</string>
+    <string name="gsensor_end">Откалибровано</string>
+    <string name="gsensor_button1">Завершено</string>
+    <string name="gsensor_button2">Калибровка</string>
+
+    <string name="usb_charge_title_head">USB Зарядка</string>
+    <string name="usb_charge_summary_head">Включение/отключение зарядки от USB</string>
+
+    <string name="cpu_title">Стастика ЦП</string>
+    <string name="cpu_summary">Подробная статистика работы ЦП</string>
+	
 </resources>

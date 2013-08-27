@@ -211,6 +211,7 @@ on post-fs-data
     # the following directory.
     mkdir /data/drm 0770 drm drm
     mkdir /data/persistw 0771 lgdrm lgdrm_acc
+    mkdir /drm/wv3 0770 drm drm
 
     # If there is no fs-post-data action in the init.<device>.rc file, you
     # must uncomment this line, otherwise encrypted filesystems

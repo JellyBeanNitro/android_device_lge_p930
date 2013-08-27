@@ -1,6 +1,6 @@
 /*
 ** Copyright 2008, The Android Open-Source Project
-** Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
+** Copyright (c) 2010-2012, The Linux Foundation. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -61,34 +61,9 @@ using android::Condition;
 #define EQ_DISABLE      0x0000
 #define RX_IIR_ENABLE   0x0004
 #define RX_IIR_DISABLE  0x0000
-#define LPA_BUFFER_SIZE 256*1024
-#define BUFFER_COUNT 4
+#define LPA_BUFFER_SIZE 512*1024
+#define BUFFER_COUNT 2
 #define MONO_CHANNEL_MODE 1
-
-#ifdef HTC_ACOUSTIC_AUDIO
-    #define MOD_PLAY 1
-    #define MOD_REC  2
-    #define MOD_TX   3
-    #define MOD_RX   4
-
-    #define ACDB_ID_HEADSET_PLAYBACK          10
-    #define ACDB_ID_ALT_SPKR_PLAYBACK         601
-
-    #define ACDB_ID_HAC_HANDSET_MIC           107
-    #define ACDB_ID_HAC_HANDSET_SPKR          207
-    #define ACDB_ID_EXT_MIC_REC               307
-    #define ACDB_ID_HEADSET_RINGTONE_PLAYBACK 408
-    #define ACDB_ID_INT_MIC_REC               507
-    #define ACDB_ID_CAMCORDER                 508
-    #define ACDB_ID_INT_MIC_VR                509
-    #define ACDB_ID_SPKR_PLAYBACK             607
-
-    struct msm_bt_endpoint {
-        int tx;
-        int rx;
-        char name[64];
-    };
-#endif
 
 struct eq_filter_type {
     int16_t  gain;
@@ -106,6 +81,22 @@ struct rx_iir_filter {
     uint16_t num_bands;
     uint16_t iir_params[48];
 };
+
+struct msm_audio_config {
+    uint32_t buffer_size;
+    uint32_t buffer_count;
+    uint32_t channel_count;
+    uint32_t sample_rate;
+    uint32_t codec_type;
+    uint32_t unused[3];
+};
+
+struct msm_audio_stats {
+    uint32_t byte_count;
+    uint32_t sample_count;
+    uint32_t unused[2];
+};
+
 
 enum tty_modes {
     TTY_OFF = 0,
@@ -192,21 +183,7 @@ private:
     status_t    dumpInternals(int fd, const Vector<String16>& args);
     uint32_t    getInputSampleRate(uint32_t sampleRate);
     bool        checkOutputStandby();
-#ifdef HTC_ACOUSTIC_AUDIO
-    status_t    get_mMode();
-    status_t    set_mRecordState(bool onoff);
-    status_t    get_mRecordState();
-    status_t    get_snd_dev();
-#endif
     status_t    doRouting(AudioStreamInMSM8x60 *input);
-#ifdef HTC_ACOUSTIC_AUDIO
-    void        getACDB(uint32_t device);
-    status_t    do_aic3254_control(uint32_t device);
-    bool        isAic3254Device(uint32_t device);
-    status_t    aic3254_config(uint32_t device);
-    int         aic3254_ioctl(int cmd, const int argc);
-    void        aic3254_powerdown();
-#endif
 #ifdef QCOM_FM_ENABLED
     status_t    enableFM(int sndDevice);
 #endif
@@ -348,6 +325,9 @@ public:
 
     virtual status_t    getNextWriteTimestamp(int64_t *timestamp);
     virtual status_t    setObserver(void *observer);
+    virtual status_t    getBufferInfo(buf_info **buf);
+    virtual status_t    isBufferAvailable(int *isAvail);
+
     void* memBufferAlloc(int nSize, int32_t *ion_fd);
 
 private:
@@ -360,6 +340,7 @@ private:
     uint32_t            mStreamVol;
 
     bool                mPaused;
+    bool                mIsDriverStarted;
     bool                mSeeking;
     bool                mReachedEOS;
     bool                mSkipWrite;
@@ -368,9 +349,6 @@ private:
     AudioHardware* mHardware;
     AudioEventObserver *mObserver;
 
-    //status_t            openDevice(char *pUseCase, bool bIsUseCase, int devices);
-
-    //status_t            closeDevice(alsa_handle_t *pDevice);
     void                createEventThread();
     void                bufferAlloc();
     void                bufferDeAlloc();
@@ -462,7 +440,6 @@ private:
                 int         state() const { return mState; }
         virtual status_t    addAudioEffect(effect_interface_s**) { return 0;}
         virtual status_t    removeAudioEffect(effect_interface_s**) { return 0;}
-        virtual int         isForVR() const { return mForVR; }
 
     private:
                 AudioHardware* mHardware;
@@ -476,7 +453,6 @@ private:
                 uint32_t    mDevices;
                 bool        mFirstread;
                 uint32_t    mFmRec;
-                int         mForVR;
     };
 #ifdef QCOM_VOIP_ENABLED
         class AudioStreamInVoip : public AudioStreamInMSM8x60 {
@@ -508,7 +484,6 @@ private:
         virtual unsigned int  getInputFramesLost() const { return 0; }
                 uint32_t    devices() { return mDevices; }
                 int         state() const { return mState; }
-        virtual int         isForVR() const { return 0; }
 
     private:
                 AudioHardware* mHardware;
@@ -532,11 +507,6 @@ private:
             bool        mBluetoothNrec;
             bool        mBluetoothVGS;
             uint32_t    mBluetoothId;
-#ifdef HTC_ACOUSTIC_AUDIO
-            bool        mHACSetting;
-            uint32_t    mBluetoothIdTx;
-            uint32_t    mBluetoothIdRx;
-#endif
             AudioStreamOutMSM8x60*  mOutput;
 #ifdef QCOM_VOIP_ENABLED
             AudioStreamOutDirect*  mDirectOutput;
@@ -546,29 +516,13 @@ private:
 #ifdef QCOM_VOIP_ENABLED
             SortedVector <AudioStreamInVoip*>   mVoipInputs;
 #endif
-#ifdef HTC_ACOUSTIC_AUDIO
-            msm_bt_endpoint *mBTEndpoints;
-            int mNumBTEndpoints;
-#endif
             int mCurSndDevice;
-#ifdef HTC_ACOUSTIC_AUDIO
-            float mVoiceVolume;
-#endif
             int mTtyMode;
             int mNumPcmRec;
             Mutex mLock;
 #ifdef QCOM_VOIP_ENABLED
             int mVoipFd;
             int mNumVoipStreams;
-#endif
-#ifdef HTC_ACOUSTIC_AUDIO
-            int mNoiseSuppressionState;
-            bool mDualMicEnabled;
-            bool mRecordState;
-            char mCurDspProfile[22];
-            bool mEffectEnabled;
-            char mActiveAP[10];
-            char mEffect[10];
 #endif
 
 };

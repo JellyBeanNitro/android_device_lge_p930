@@ -31,5 +31,21 @@
         <item>1024</item>
         <item>2048</item>
     </string-array>
+	
+    <string-array name="blx_entries">
+        <item>80%</item>
+        <item>85%</item>
+        <item>90%</item>
+        <item>95%</item>
+        <item>100%</item>
+    </string-array>
+
+    <string-array name="blx_values" translatable="false">
+        <item>80</item>
+        <item>85</item>
+        <item>90</item>
+        <item>95</item>
+        <item>100</item>
+    </string-array>
 
 </resources>
